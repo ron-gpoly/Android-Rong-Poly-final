@@ -1,5 +1,6 @@
 package com.example.classwork_recyclerview.activity;
 
+import android.app.DownloadManager;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -8,54 +9,86 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.classwork_recyclerview.R;
 import com.example.classwork_recyclerview.adapter.Adapter;
+import com.example.classwork_recyclerview.databinding.ActivityMainBinding;
+import com.example.classwork_recyclerview.fragment.CartFragment;
+import com.example.classwork_recyclerview.fragment.FavoriteFragment;
+import com.example.classwork_recyclerview.fragment.HomeFragment;
+import com.example.classwork_recyclerview.fragment.MenuFragment;
 import com.example.classwork_recyclerview.model.ModelList;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class MainActivity extends AppCompatActivity {
 
-    private List<ModelList> data;
-    private RecyclerView recyclerView;
-    private Adapter adapter;
+    private ActivityMainBinding binding;
+
+    private Fragment homeFragment = new HomeFragment();
+    private Fragment menuFragment = new MenuFragment();
+    private Fragment cartFragment = new CartFragment();
+    private Fragment favoriteFragment = new FavoriteFragment();
+    private Fragment activeFragment = homeFragment;
+
+    private FragmentManager fm = getSupportFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.recyclerview);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        initData();
-        setupRecyclerView();
+
+
+        setupBottomNavigation();
+        
+        // Load initial fragment
+        fm.beginTransaction().add(R.id.fragmentContainer, cartFragment, "3").hide(cartFragment).commit();
+        fm.beginTransaction().add(R.id.fragmentContainer, menuFragment, "2").hide(menuFragment).commit();
+        fm.beginTransaction().add(R.id.fragmentContainer, favoriteFragment, "4").hide(favoriteFragment).commit();
+        fm.beginTransaction().add(R.id.fragmentContainer, homeFragment, "1").commit();
     }
 
-    private void initData() {
-        data = new ArrayList<>();
-        data.add(new ModelList(R.drawable.cloth, "Cotton", "Peter Parker's life is turned upside down.", 211, 101));
-        data.add(new ModelList(R.drawable.cloth, "The Amazing Spider-Man", "Peter Parker finds a clue that might help him understand why his parents disappeared.", 150, 80));
-        data.add(new ModelList(R.drawable.cloth, "Spider-Man: Homecoming", "Peter Parker balances his life as an ordinary high school student in Queens.", 180, 90));
-        data.add(new ModelList(R.drawable.cloth, "Spider-Man 2", "Peter Parker is beset with troubles in his failing personal life.", 120, 60));
-        data.add(new ModelList(R.drawable.cloth, "Spider-Man: Into the Spider-Verse", "Teen Miles Morales becomes the Spider-Man of his universe.", 200, 110));
-    }
-
-    private void setupRecyclerView() {
-        recyclerView = findViewById(R.id.rvMovie);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new Adapter(data);
-        adapter.setOnItemClickListener(position -> {
-            ModelList item = data.get(position);
-            Toast.makeText(MainActivity.this, "Clicked: " + item.getTitle(), Toast.LENGTH_SHORT).show();
+    private void setupBottomNavigation() {
+        binding.bottomNav.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.home) {
+                fm.beginTransaction().hide(activeFragment).show(homeFragment).commit();
+                activeFragment = homeFragment;
+                return true;
+            } else if (id == R.id.cart) {
+                fm.beginTransaction().hide(activeFragment).show(cartFragment).commit();
+                activeFragment = cartFragment;
+                return true;
+            } else if (id == R.id.favorite) {
+                fm.beginTransaction().hide(activeFragment).show(favoriteFragment).commit();
+                activeFragment = favoriteFragment;
+                return true;
+            } else if (id == R.id.menu) {
+                fm.beginTransaction().hide(activeFragment).show(menuFragment).commit();
+                activeFragment = menuFragment;
+                return true;
+            }
+            return false;
         });
-        recyclerView.setAdapter(adapter);
     }
 }

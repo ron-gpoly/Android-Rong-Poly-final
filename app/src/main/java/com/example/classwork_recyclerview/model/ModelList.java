@@ -1,5 +1,8 @@
 package com.example.classwork_recyclerview.model;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class ModelList {
     private int image;
     private String title;
@@ -34,4 +37,7 @@ public class ModelList {
     public int getPrice2() {
         return price2;
     }
+
+
+
 }

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="15dp"
+    android:padding="10dp"
     android:background="@color/white"
     android:id="@+id/onClick">
 
@@ -55,19 +55,16 @@
             android:textSize="18sp"
             android:maxLines="2"
             android:textColor="@color/gray"
-            android:layout_marginLeft="10dp"
             />
 
         <TextView
             android:id="@+id/price1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="19dp"
             android:layout_marginTop="10dp"
             android:text="$ 211"
-            android:textSize="18sp"
             android:textColor="@color/gray"
-            android:layout_marginLeft="10dp"
-            />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/price2"
@@ -77,8 +74,7 @@
 
             android:text="$ 101"
             android:textSize="20sp"
-            android:textColor="@color/red"
-            android:layout_marginLeft="10dp"
+            android:textColor="@color/primary"
             />
 
 

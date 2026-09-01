@@ -2,8 +2,14 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Classwork_recyclerView" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+         <item name="colorPrimary">@color/primary</item>
     </style>
 
     <style name="Theme.Classwork_recyclerView" parent="Base.Theme.Classwork_recyclerView" />
+
+    <style name="LaunchTheme" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/started_image</item>
+    </style>
+
 </resources>
+
